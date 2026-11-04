@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f2eb;
+}
+::-webkit-scrollbar-thumb {
+  background: #d6cebe;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b5aa96;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.95; transform: scale(1) translate(0, 0); }
+  25% { opacity: 0.85; transform: scale(0.98) translate(-0.5px, -1px); }
+  50% { opacity: 1; transform: scale(1.03) translate(0.5px, 0.5px); }
+  75% { opacity: 0.9; transform: scale(0.99) translate(-0.5px, 0); }
+}
+
+.animate-candle-flame {
+  animation: flicker 2.4s ease-in-out infinite;
+}
+

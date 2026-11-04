@@ -1,0 +1,6 @@
+{
+  "name": "L'AURA ATELIER - Luxury Scented Candles",
+  "description": "Artisanal handcrafted scented candles with bespoke fragrance blending, vessel customization, and dual-currency shopping in Nigerian Naira (₦) and US Dollars ($).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
