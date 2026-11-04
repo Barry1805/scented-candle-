@@ -6,13 +6,17 @@ import { ProductCard } from './ProductCard';
 
 interface CatalogSectionProps {
   primaryCurrency: Currency;
+  wishlistProductIds: Set<string>;
   onAddToCart: (product: CandleProduct) => void;
+  onToggleWishlist: (product: CandleProduct) => void;
   onQuickView: (product: CandleProduct) => void;
 }
 
 export const CatalogSection: React.FC<CatalogSectionProps> = ({
   primaryCurrency,
+  wishlistProductIds,
   onAddToCart,
+  onToggleWishlist,
   onQuickView
 }) => {
   const [selectedFamily, setSelectedFamily] = useState<string>('all');
@@ -116,7 +120,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                 key={candle.id}
                 product={candle}
                 primaryCurrency={primaryCurrency}
+                isWishlisted={wishlistProductIds.has(candle.id)}
                 onAddToCart={onAddToCart}
+                onToggleWishlist={onToggleWishlist}
                 onQuickView={onQuickView}
               />
             ))}

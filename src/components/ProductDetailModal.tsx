@@ -8,7 +8,9 @@ interface ProductDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   primaryCurrency: Currency;
+  isWishlisted: boolean;
   onAddToCart: (product: CandleProduct, quantity: number) => void;
+  onToggleWishlist: (product: CandleProduct) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -16,7 +18,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   isOpen,
   onClose,
   primaryCurrency,
-  onAddToCart
+  isWishlisted,
+  onAddToCart,
+  onToggleWishlist
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
@@ -141,8 +145,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
             </div>
 
-            {/* Quantity Stepper & Add Button */}
-            <div className="pt-4 border-t border-stone-200 flex items-center gap-4">
+            {/* Quantity Stepper, Wishlist & Add Button */}
+            <div className="pt-4 border-t border-stone-200 flex items-center gap-3">
               <div className="flex items-center border border-stone-200 rounded-lg bg-stone-50">
                 <button
                   type="button"
@@ -162,6 +166,20 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   +
                 </button>
               </div>
+
+              <button
+                type="button"
+                onClick={() => onToggleWishlist(product)}
+                className={`p-3 rounded-lg border transition-all flex items-center justify-center ${
+                  isWishlisted 
+                    ? 'border-rose-300 bg-rose-50 text-rose-600' 
+                    : 'border-stone-200 hover:border-stone-300 text-stone-600 hover:text-rose-600 bg-white'
+                }`}
+                title={isWishlisted ? 'Saved in Wishlist' : 'Add to Wishlist'}
+                aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              >
+                <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-rose-600' : ''}`} />
+              </button>
 
               <button
                 type="button"

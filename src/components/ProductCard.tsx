@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Eye, Star, Flame, Check } from 'lucide-react';
+import { ShoppingBag, Eye, Star, Flame, Check, Heart } from 'lucide-react';
 import { CandleProduct, Currency } from '../types/candle';
 import { DualPriceTag } from './DualPriceTag';
 
 interface ProductCardProps {
   product: CandleProduct;
   primaryCurrency: Currency;
+  isWishlisted: boolean;
   onAddToCart: (product: CandleProduct) => void;
+  onToggleWishlist: (product: CandleProduct) => void;
   onQuickView: (product: CandleProduct) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   primaryCurrency,
+  isWishlisted,
   onAddToCart,
+  onToggleWishlist,
   onQuickView
 }) => {
   const [imageError, setImageError] = useState(false);
@@ -26,10 +30,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     setTimeout(() => setJustAdded(false), 2000);
   };
 
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onToggleWishlist(product);
+  };
+
   return (
     <article 
       onClick={() => onQuickView(product)}
-      className="group bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col cursor-pointer"
+      className="group bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col cursor-pointer relative"
     >
       {/* 1. Image Container (takes 65-70% visual focus on neutral solid backdrop) */}
       <div className="relative aspect-[4/3] bg-stone-100 overflow-hidden">
@@ -49,6 +58,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span className="text-xs text-stone-500 mt-1">{product.collection}</span>
           </div>
         )}
+
+        {/* Wishlist Heart Button (Always accessible) */}
+        <button
+          type="button"
+          onClick={handleWishlistClick}
+          aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+          className={`absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all shadow-xs ${
+            isWishlisted
+              ? 'bg-white text-rose-600 shadow-md ring-1 ring-rose-200'
+              : 'bg-white/80 hover:bg-white text-stone-600 hover:text-rose-600'
+          }`}
+          title={isWishlisted ? 'Saved in Wishlist' : 'Add to Wishlist'}
+        >
+          <Heart className={`w-4 h-4 transition-transform ${isWishlisted ? 'fill-rose-600 scale-110' : ''}`} />
+        </button>
 
         {/* Hover Quick Action Layer */}
         <div className="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2 p-4">

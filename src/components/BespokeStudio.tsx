@@ -11,7 +11,8 @@ import {
   Feather, 
   RotateCcw,
   ShoppingBag,
-  Sliders
+  Sliders,
+  Heart
 } from 'lucide-react';
 import { 
   VESSEL_OPTIONS, 
@@ -29,6 +30,7 @@ import { convertUSDToNGN } from '../utils/currency';
 interface BespokeStudioProps {
   primaryCurrency: Currency;
   onAddToCart: (config: CustomCandleConfig, priceUSD: number, priceNGN: number) => void;
+  onSaveToWishlist?: (config: CustomCandleConfig, priceUSD: number, priceNGN: number) => void;
 }
 
 const DEFAULT_CONFIG: CustomCandleConfig = {
@@ -53,12 +55,21 @@ const DEFAULT_CONFIG: CustomCandleConfig = {
   waxColorTint: 'natural-cream'
 };
 
-export const BespokeStudio: React.FC<BespokeStudioProps> = ({ primaryCurrency, onAddToCart }) => {
+export const BespokeStudio: React.FC<BespokeStudioProps> = ({ primaryCurrency, onAddToCart, onSaveToWishlist }) => {
   const [config, setConfig] = useState<CustomCandleConfig>(DEFAULT_CONFIG);
   const [activeTab, setActiveTab] = useState<'vessel' | 'wax-wick' | 'fragrance' | 'label' | 'finishing'>('vessel');
   const [isLit, setIsLit] = useState(true);
   const [isCracklePlaying, setIsCracklePlaying] = useState(false);
   const [addedToast, setAddedToast] = useState(false);
+  const [wishlistToast, setWishlistToast] = useState(false);
+
+  const handleSaveWishlist = () => {
+    if (onSaveToWishlist) {
+      onSaveToWishlist(config, totalUSD, totalNGN);
+      setWishlistToast(true);
+      setTimeout(() => setWishlistToast(false), 3000);
+    }
+  };
 
   // Selected entities
   const selectedVessel = VESSEL_OPTIONS.find(v => v.id === config.vesselId) || VESSEL_OPTIONS[0];
@@ -306,14 +317,25 @@ export const BespokeStudio: React.FC<BespokeStudioProps> = ({ primaryCurrency, o
                     className="mt-0.5 text-white"
                   />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleAdd}
-                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-semibold rounded-lg text-xs flex items-center gap-2 transition-colors shadow-lg shadow-amber-500/20 whitespace-nowrap"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  Add to Cart
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveWishlist}
+                    className="p-2.5 bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-rose-400 rounded-lg text-xs flex items-center justify-center transition-colors border border-stone-700"
+                    title="Save formula to personal wishlist"
+                    aria-label="Save custom candle to wishlist"
+                  >
+                    <Heart className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAdd}
+                    className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-semibold rounded-lg text-xs flex items-center gap-2 transition-colors shadow-lg shadow-amber-500/20 whitespace-nowrap"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Add to Cart
+                  </button>
+                </div>
               </div>
 
               {/* Added Feedback Toast */}
@@ -321,6 +343,14 @@ export const BespokeStudio: React.FC<BespokeStudioProps> = ({ primaryCurrency, o
                 <div className="mt-3 py-2 px-3 bg-emerald-950/80 border border-emerald-700/60 rounded text-xs text-emerald-200 flex items-center gap-2 animate-in fade-in">
                   <Check className="w-4 h-4 text-emerald-400" />
                   Custom candle added to bag with dual currency receipt!
+                </div>
+              )}
+
+              {/* Wishlist Feedback Toast */}
+              {wishlistToast && (
+                <div className="mt-3 py-2 px-3 bg-rose-950/80 border border-rose-700/60 rounded text-xs text-rose-200 flex items-center gap-2 animate-in fade-in">
+                  <Heart className="w-4 h-4 text-rose-400 fill-rose-400" />
+                  Custom candle formula saved to your personal wishlist!
                 </div>
               )}
             </div>
@@ -979,6 +1009,14 @@ export const BespokeStudio: React.FC<BespokeStudioProps> = ({ primaryCurrency, o
                       className="px-4 py-2 border border-stone-200 text-stone-600 hover:text-stone-900 text-xs rounded-lg"
                     >
                       ← Back to Label
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSaveWishlist}
+                      className="px-4 py-2.5 border border-stone-300 hover:border-rose-400 text-stone-700 hover:text-rose-600 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors bg-white"
+                    >
+                      <Heart className="w-3.5 h-3.5" />
+                      <span>Save to Wishlist</span>
                     </button>
                     <button
                       type="button"

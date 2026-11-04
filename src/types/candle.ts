@@ -109,3 +109,22 @@ export interface Review {
   comment: string;
   verified: boolean;
 }
+
+export interface WishlistItem {
+  id: string;
+  type: 'standard' | 'bespoke';
+  productId?: string;
+  product?: CandleProduct;
+  bespokeConfig?: CustomCandleConfig;
+  priceUSD: number;
+  priceNGN: number;
+  addedAt: string;
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  isRegistered: boolean;
+}
+
